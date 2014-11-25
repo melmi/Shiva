@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shiva", "Shiva\Shiva.csproj", "{A552D970-1B21-4088-8439-AF2748A57EBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shiva.Sample", "Shiva.Sample\Shiva.Sample.csproj", "{5D251D96-8DF5-46C9-9393-6227C43455E7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A552D970-1B21-4088-8439-AF2748A57EBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A552D970-1B21-4088-8439-AF2748A57EBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A552D970-1B21-4088-8439-AF2748A57EBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A552D970-1B21-4088-8439-AF2748A57EBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D251D96-8DF5-46C9-9393-6227C43455E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D251D96-8DF5-46C9-9393-6227C43455E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D251D96-8DF5-46C9-9393-6227C43455E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D251D96-8DF5-46C9-9393-6227C43455E7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
