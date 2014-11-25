@@ -1,12 +1,20 @@
 # Shiva
 
-Shiva is a simple class library for easier implementation of ViewModels. This humble class library is good for small projects.
+Shiva is a simple class library for easier implementation of ViewModels. 
+The basic design goal of it is to be used in small projects.
 
 The word *Shiva* in Persian means Eloquent.
 
+(Shiva in Nuget Package Gallery)[https://www.nuget.org/packages/ShivaMvvm/]
+
 ## Why?
 
-When I started using MVVM, I saw myself repeating a lot of code for each view model. I searched for existing libraries, but they were too complicated for me. So, I ended up with dynamic view models (after seeing [this article](http://www.codeproject.com/Articles/613610/Dynamic-View-Model)) and I tried to complete it.
+When I started using MVVM, I saw myself repeating a lot of code for each ViewModel. 
+I searched for existing libraries to see if they can shorten my code, but they were 
+too complicated for me. Searching for methods that addressed shortening writing 
+ViewModels, I ended up with dynamic view models 
+(after reading [this article](http://www.codeproject.com/Articles/613610/Dynamic-View-Model)). 
+This project is a try to expand the use of dynamic objects for implementing VMs.
 
 ## How to use?
 
@@ -38,7 +46,8 @@ View:
 	</StackPanel>
 ```
 
-Writing a ViewModel for even such a simple Model is not so straightforward. So let's see what `Shiva` can do for us?
+Writing a ViewModel for even such a simple Model is not so straightforward. 
+So let's see what `Shiva` can do for us?
 
 ### Basic ViewModel
 
@@ -54,7 +63,8 @@ All of the magic of `Shiva` relies in `PersonDialogViewModel` class:
     }
 ```
 
-Thats all. This ViewModel implements `INotifyPropertyChanged` and the View can be bound to it for good. `Shiva` automatically exposes all properties with following types:
+That's all. This VM implements `ViewModelProxy` and the View can be 
+bound to it. `Shiva` automatically exposes all properties of the following types:
 
 - Enumerated types
 - Simple types (`int`, `bool`, etc)
@@ -63,7 +73,8 @@ Thats all. This ViewModel implements `INotifyPropertyChanged` and the View can b
 
 ### Validation
 
-What if we want to add some validation to our ViewModel? `Shiva` utilizes a `Configuration` class in each `ViewModelProxy` that works fine for validation.
+What if we want to add some validation to our ViewModel? `Shiva` utilizes a `Configuration`
+ class in each `ViewModelProxy` that works fine for validation.
 
 ``` csharp
     class PersonDialogViewModel : Shiva.ViewModelProxy<Models.Person>
@@ -80,13 +91,14 @@ What if we want to add some validation to our ViewModel? `Shiva` utilizes a `Con
 
 ### Dependent Properties
 
-Consider a case that we want to have a `FullName` property in our ViewModel like this:
+Consider the case that we want to have a `FullName` property in our VM like this:
 
 ```csharp
         public string FullName { get { return Model.FirstName + " " + Model.LastName; } }
 ```
 
-We can tell `Shiva` that whenever `FirstName` or `LastName` properties changed, it should fire `PropertyChanged` event for this event, too. Again in the constructor we will have:
+We can tell `Shiva` that whenever `FirstName` or `LastName` properties changed, it should
+ fire `PropertyChanged` event for this event, too. Again in the constructor we will have:
 
 ```csharp
 	   Configuration.Property(() => FullName)
@@ -95,7 +107,8 @@ We can tell `Shiva` that whenever `FirstName` or `LastName` properties changed, 
 ```
 
 ### What to do if user canceled changes?
-`ViewModelProxy` also implements `IEditableObject` that can handle cancellation. The final ViewModel is here:
+`ViewModelProxy` also implements `IEditableObject` that can handle cancellation. The final 
+ViewModel is here:
 
 ```csharp
     class PersonDialogViewModel : Shiva.ViewModelProxy<Models.Person>
@@ -124,7 +137,7 @@ We can tell `Shiva` that whenever `FirstName` or `LastName` properties changed, 
     }
 ```
 
-You may noticed that `Shiva` has a simple implementation of `RelayCommand`.
+You may noticed that `Shiva` also has a simple implementation of `RelayCommand`.
 
 ## License
 
