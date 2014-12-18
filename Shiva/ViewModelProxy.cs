@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Shiva
 {
-    public abstract class ViewModelProxy<T> : DynamicObject, INotifyPropertyChanged, IEditableObject, INotifyDataErrorInfo
+    public abstract class ViewModelProxy<T> : DynamicObject, IOnNotifyPropertyChanged, IEditableObject, INotifyDataErrorInfo
         where T : class, new()
     {
         PropertyInfo[] objectProperties;
@@ -59,11 +59,11 @@ namespace Shiva
 
         #endregion
 
-        #region INotifyPropertyChanged
+        #region IOnNotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanged(string property)
+        public void OnNotifyPropertyChanged(string property)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
@@ -72,7 +72,7 @@ namespace Shiva
                 .Where(pc => pc.Value.Dependencies.Contains(property))
                 .Select(pc => pc.Key)
                 .ToList();
-            foreach (var p in dependingProps) OnPropertyChanged(p);
+            foreach (var p in dependingProps) OnNotifyPropertyChanged(p);
         }
 
         #endregion
@@ -127,7 +127,7 @@ namespace Shiva
                     {
                         propertyErrors.Add(pi.Name, errs);
                         errsChanged = true;
-                    } OnPropertyChanged(binder.Name);
+                    } OnNotifyPropertyChanged(binder.Name);
                 }
 
                 if (errsChanged) OnErrorsChanged(pi.Name);

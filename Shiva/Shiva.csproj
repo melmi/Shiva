@@ -42,6 +42,8 @@
   <ItemGroup>
     <Compile Include="ConfigurationItem.cs" />
     <Compile Include="IConfigurationItem.cs" />
+    <Compile Include="IOnNotifyPropertyChanged.cs" />
+    <Compile Include="IOnNotifyPropertyChangedEx.cs" />
     <Compile Include="IValidationRule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyEx.cs" />
