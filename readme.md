@@ -51,7 +51,7 @@ So let's see what `Shiva` can do for us?
 
 ### Basic ViewModel
 
-All of the magic of `Shiva` relies in `PersonDialogViewModel` class:
+All of the magic of `Shiva` relies in `ViewModelProxy` class:
 
 ```csharp
     class PersonDialogViewModel : Shiva.ViewModelProxy<Models.Person>
@@ -137,8 +137,18 @@ ViewModel is here:
     }
 ```
 
-You may noticed that `Shiva` also has a simple implementation of `RelayCommand`.
+## More Shiva
+
+Although Shiva is mainly formed around `ViewModelProxy`, it has more:
+
+- You may noticed that `Shiva` also has a simple implementation of `RelayCommand`.
+- `ViewModelProxy` provides `GetMember` and `SetMember` methods which are the recommended way
+  for changing value of `ViewModelProxy.Model` members.
+- There is a `SetFieldAndNotify` method as an extension for `INotifyPropertyChangedEx`.
+- The `Configuration` class can be used with any class that implements `INotifyPropertyChanged` and
+  `INotifyDataErrorInfo`.
 
 ## License
 
-Shiva is published under MIT license.
+Shiva is published under MIT license. It internally uses [Dinamitey](https://github.com/ekonbenefits/dynamitey)
+which is under Apache License.
