@@ -3,13 +3,13 @@
 Shiva is a simple class library for easier implementation of ViewModels. 
 The basic design goal of it is to be used in small projects.
 
-The word *Shiva* in Persian means Eloquent.
+The word *shiva* in Persian means Eloquent.
 
-(Shiva in Nuget Package Gallery)[https://www.nuget.org/packages/ShivaMvvm/]
+[Shiva in Nuget Package Gallery](https://www.nuget.org/packages/ShivaMvvm/)
 
 ## Why?
 
-When I started using MVVM, I saw myself repeating a lot of code for each ViewModel. 
+When I started using MVVM, I saw myself repeating a lot of code for each VM. 
 I searched for existing libraries to see if they can shorten my code, but they were 
 too complicated for me. Searching for methods that addressed shortening writing 
 ViewModels, I ended up with dynamic view models 
