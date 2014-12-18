@@ -12,9 +12,10 @@ using System.Threading.Tasks;
 
 namespace Shiva
 {
-    public abstract class ViewModelProxy<T> : DynamicObject, IOnNotifyPropertyChanged, IEditableObject, INotifyDataErrorInfo
+    public abstract class ViewModelProxy<T> : DynamicObject, INotifyPropertyChanged, IEditableObject, INotifyDataErrorInfo
         where T : class, new()
     {
+        public Configuration<ViewModelProxy<T>> Configuration { get; private set; }
         PropertyInfo[] objectProperties;
 
         T originalModel, dirtyModel;
@@ -36,7 +37,7 @@ namespace Shiva
 
         public ViewModelProxy()
         {
-            Configuration = new Configuration();
+            Configuration = new Configuration<ViewModelProxy<T>>(this, OnNotifyPropertyChanged, OnErrorsChanged);
         }
 
         #region static methods
@@ -49,17 +50,17 @@ namespace Shiva
 
         static bool isSupportedType(Type t)
         {
-            return t.IsEnum || 
-                   t.IsPrimitive || 
-                   t == typeof(string) || 
-                   t == typeof(DateTime) || 
-                   t == typeof(TimeSpan) || 
+            return t.IsEnum ||
+                   t.IsPrimitive ||
+                   t == typeof(string) ||
+                   t == typeof(DateTime) ||
+                   t == typeof(TimeSpan) ||
                    t == typeof(DateTimeOffset);
         }
 
         #endregion
 
-        #region IOnNotifyPropertyChanged
+        #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -67,12 +68,6 @@ namespace Shiva
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
-
-            var dependingProps = Configuration.PropertyConfigurations
-                .Where(pc => pc.Value.Dependencies.Contains(property))
-                .Select(pc => pc.Key)
-                .ToList();
-            foreach (var p in dependingProps) OnNotifyPropertyChanged(p);
         }
 
         #endregion
@@ -103,34 +98,20 @@ namespace Shiva
                 try { val = Convert.ChangeType(value, pi.PropertyType); }
                 catch { convertErr = true; }
 
-                if (!convertErr && val.Equals(getMember(pi.Name))) return false;
+                var oldVal = Dynamitey.Dynamic.InvokeGet(this, pi.Name);
+                if (!convertErr && 
+                    Dynamitey.Dynamic.InvokeBinaryOperator(val, ExpressionType.Equal, oldVal)) 
+                    return false;
 
-                bool errsChanged = false;
-                if (propertyErrors.ContainsKey(pi.Name))
-                {
-                    propertyErrors.Remove(pi.Name);
-                    errsChanged = true;
-                }
+                Configuration.Validator.ClearErrors(pi.Name);
 
                 if (convertErr)
-                {
-                    errsChanged = true;
-                    propertyErrors.Add(pi.Name, new List<string>() { "Value format error." });
-                }
+                    Configuration.Validator.AddError(pi.Name, "Value format error.");
                 else
                 {
                     pi.SetValue(Model, val, null);
-
-
-                    var errs = Configuration.Validate(pi.Name, val);
-                    if (errs != null && errs.Count > 0)
-                    {
-                        propertyErrors.Add(pi.Name, errs);
-                        errsChanged = true;
-                    } OnNotifyPropertyChanged(binder.Name);
+                    OnNotifyPropertyChanged(binder.Name);
                 }
-
-                if (errsChanged) OnErrorsChanged(pi.Name);
 
                 return !convertErr;
             }
@@ -170,63 +151,37 @@ namespace Shiva
 
         #region INotifyDataErrorInfo
 
-        public Configuration Configuration { get; private set; }
-
-        Dictionary<string, List<string>> propertyErrors = new Dictionary<string, List<string>>();
-
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
-        protected void OnErrorsChanged(string propertyName)
+        protected void OnErrorsChanged(string property)
         {
             if (ErrorsChanged != null)
-                ErrorsChanged(this, new DataErrorsChangedEventArgs(propertyName));
+                ErrorsChanged(this, new DataErrorsChangedEventArgs(property));
         }
 
         public System.Collections.IEnumerable GetErrors(string propertyName)
         {
-            if (!propertyErrors.ContainsKey(propertyName)) return null;
-            return propertyErrors[propertyName];
+            if (!Configuration.Validator.PropertyErrors.ContainsKey(propertyName)) return null;
+            return Configuration.Validator.PropertyErrors[propertyName];
         }
 
         public bool HasErrors
         {
-            get { return propertyErrors.Count > 0; }
+            get { return Configuration.Validator.PropertyErrors.Count > 0; }
         }
 
         #endregion
 
         #region Get/Set
 
-        object getMember(string memberName)
-        {
-            var binder = Microsoft.CSharp.RuntimeBinder.Binder.GetMember(
-                CSharpBinderFlags.None,
-                memberName,
-                this.GetType(),
-                new[] { CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null) });
-            var callsite = CallSite<Func<CallSite, object, object>>.Create(binder);
-            return callsite.Target(callsite, this);
-        }
-
-        void setMember(string memberName, object value)
-        {
-            var binder = Microsoft.CSharp.RuntimeBinder.Binder.SetMember(
-                CSharpBinderFlags.None,
-                memberName,
-                this.GetType(),
-                new[] { CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null) });
-            var callsite = CallSite<Func<CallSite, object, object, object>>.Create(binder);
-            callsite.Target(callsite, this, value);
-        }
-
         public TValue GetMember<TValue>(Expression<Func<TValue>> selectorExpression)
         {
-            return (TValue)getMember(PropertyEx.Name(selectorExpression));
+            return Dynamitey.Dynamic.InvokeGet(this, PropertyEx.Name(selectorExpression));
         }
 
         public void SetMember<TValue>(Expression<Func<TValue>> selectorExpression, TValue value)
         {
-            setMember(PropertyEx.Name(selectorExpression), value);
+            Dynamitey.Dynamic.InvokeSet(this, PropertyEx.Name(selectorExpression), value);
         }
 
         #endregion

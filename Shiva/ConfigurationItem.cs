@@ -20,13 +20,13 @@ namespace Shiva
 
         public ConfigurationItem<T> Enforce(Func<T, bool> rule, string message)
         {
-            Rules.Add(new ValidationRule<T> { Rule = rule, Message = message });
+            Rules.Add(new ValidationRule<T>(rule, message));
             return this;
         }
 
         public ConfigurationItem<T> DependsOn(Expression<Func<T>> selectorExpression)
         {
-             Dependencies.Add(PropertyEx.Name(selectorExpression));
+            Dependencies.Add(PropertyEx.Name(selectorExpression));
             return this;
         }
     }

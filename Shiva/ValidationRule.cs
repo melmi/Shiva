@@ -8,9 +8,19 @@ namespace Shiva
 {
     public class ValidationRule<T> : IValidationRule
     {
-        public Func<T, bool> Rule { get; set; }
-        public string Message { get; set; }
-        public bool Validate(object value)
+        public Func<T, bool> Rule { get; private set; }
+        public string Message { get; private set; }
+        
+        public ValidationRule(Func<T,bool> rule, string message)
+        {
+            if (rule == null) throw new ArgumentNullException("rule");
+            if (message == null) throw new ArgumentNullException("message");
+
+            Rule = rule;
+            Message = message;
+        }
+        
+            public bool Validate(object value)
         {
             return Rule((T)value);
         } 

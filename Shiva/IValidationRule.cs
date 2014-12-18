@@ -9,6 +9,6 @@ namespace Shiva
     public interface IValidationRule
     {
         bool Validate(object value);
-        string Message { get; set; }
+        string Message { get; }
     }
 }

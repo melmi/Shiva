@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -7,37 +8,51 @@ using System.Threading.Tasks;
 
 namespace Shiva
 {
-    public class Configuration
+    public class Configuration<TObject> where TObject : INotifyPropertyChanged, INotifyDataErrorInfo
     {
+        public TObject Object { get; private set; }
         public Dictionary<string, IConfigurationItem> PropertyConfigurations { get; private set; }
+        public Validator<TObject> Validator { get; private set; }
+        Action<string> propertyChangedAction;
 
-        public Configuration()
+        public Configuration(TObject obj,
+            Action<string> propertyChangedAction,
+            Action<string> errorsChangedAction)
         {
             PropertyConfigurations = new Dictionary<string, IConfigurationItem>();
+            if (obj == null) throw new ArgumentNullException("obj");
+            Object = obj;
+            Object.PropertyChanged += Object_PropertyChanged;
+            this.propertyChangedAction = propertyChangedAction;
+            Validator = new Validator<TObject>(this, errorsChangedAction);
         }
 
-        public List<string> Validate(string propertyName, object value)
+        void Object_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (!PropertyConfigurations.ContainsKey(propertyName)) return null;
-            var errs = PropertyConfigurations[propertyName].Rules
-                                                           .Where(v => !v.Validate(value))
-                                                           .Select(r => r.Message)
-                                                           .ToList();
-            return errs.Count == 0 ? null : errs;
+            if (propertyChangedAction != null)
+            {
+                var dependingProps = PropertyConfigurations
+                    .Where(pc => pc.Value.Dependencies.Contains(e.PropertyName))
+                    .Select(pc => pc.Key)
+                    .ToList();
+                foreach (var p in dependingProps) propertyChangedAction(p);
+            }
+
+            Validator.Validate(e.PropertyName);
         }
 
         public ConfigurationItem<T> Property<T>(Expression<Func<T>> selectorExpression)
         {
             string propertyName = PropertyEx.Name(selectorExpression);
-            ConfigurationItem<T> config;
+            ConfigurationItem<T> configItem;
             if (PropertyConfigurations.ContainsKey(propertyName))
-                config = PropertyConfigurations[propertyName] as ConfigurationItem<T>;
+                configItem = PropertyConfigurations[propertyName] as ConfigurationItem<T>;
             else
             {
-                config = new ConfigurationItem<T>();
-                PropertyConfigurations.Add(propertyName, config);
+                configItem = new ConfigurationItem<T>();
+                PropertyConfigurations.Add(propertyName, configItem);
             }
-            return config;
+            return configItem;
         }
     }
 }
