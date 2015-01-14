@@ -19,7 +19,7 @@ namespace Shiva
         PropertyInfo[] objectProperties;
 
         T originalModel, dirtyModel;
-        protected T Model
+        public T Model
         {
             get { if (editing)return dirtyModel; else return originalModel; }
             set
@@ -37,7 +37,7 @@ namespace Shiva
 
         public ViewModelProxy()
         {
-            Configuration = new Configuration<ViewModelProxy<T>>(this, OnNotifyPropertyChanged, OnErrorsChanged);
+            Configuration = new Configuration<ViewModelProxy<T>>(this, OnPropertyChanged, OnErrorsChanged);
         }
 
         #region static methods
@@ -64,7 +64,7 @@ namespace Shiva
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void OnNotifyPropertyChanged(string property)
+        protected virtual void OnPropertyChanged(string property)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
@@ -110,7 +110,7 @@ namespace Shiva
                 else
                 {
                     pi.SetValue(Model, val, null);
-                    OnNotifyPropertyChanged(binder.Name);
+                    OnPropertyChanged(binder.Name);
                 }
 
                 return !convertErr;
@@ -153,7 +153,7 @@ namespace Shiva
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
-        protected void OnErrorsChanged(string property)
+        protected virtual void OnErrorsChanged(string property)
         {
             if (ErrorsChanged != null)
                 ErrorsChanged(this, new DataErrorsChangedEventArgs(property));
