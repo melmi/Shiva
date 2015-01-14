@@ -125,7 +125,7 @@ namespace Shiva
 
         bool editing = false;
 
-        public void BeginEdit()
+        public virtual void BeginEdit()
         {
             if (editing) return;
             editing = true;
@@ -133,13 +133,13 @@ namespace Shiva
             copy(originalModel, dirtyModel, objectProperties);
         }
 
-        public void CancelEdit()
+        public virtual void CancelEdit()
         {
             editing = false;
             dirtyModel = null;
         }
 
-        public void EndEdit()
+        public virtual void EndEdit()
         {
             if (!editing) return;
             editing = false;
