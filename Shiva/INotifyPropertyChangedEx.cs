@@ -15,12 +15,12 @@ namespace Shiva
             ref T1 field,
             T1 value,
             Expression<Func<T2>> selectorExpression,
-            PropertyChangedEventHandler handler) where T1 : T2
+            Action<string> propertyChangedEventHandlerCaller) where T1 : T2
         {
             if (EqualityComparer<T1>.Default.Equals(field, value)) return false;
             field = value;
-            if (handler != null)
-                handler(obj, new PropertyChangedEventArgs(PropertyEx.Name(selectorExpression)));
+            if (propertyChangedEventHandlerCaller != null)
+                propertyChangedEventHandlerCaller(PropertyEx.Name(selectorExpression));
             return true;
         }
     }

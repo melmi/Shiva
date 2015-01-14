@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Shiva
 {
-    static class PropertyEx
+    public static class PropertyEx
     {
-        static public string Name<T>(Expression<Func<T>> selectorExpression)
+        public static string Name<T>(Expression<Func<T>> selectorExpression)
         {
             if (selectorExpression == null)
                 throw new ArgumentNullException("selectorExpression");
