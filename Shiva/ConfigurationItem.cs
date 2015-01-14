@@ -24,7 +24,7 @@ namespace Shiva
             return this;
         }
 
-        public ConfigurationItem<T> DependsOn(Expression<Func<T>> selectorExpression)
+        public ConfigurationItem<T> DependsOn<T2>(Expression<Func<T2>> selectorExpression)
         {
             Dependencies.Add(PropertyEx.Name(selectorExpression));
             return this;
