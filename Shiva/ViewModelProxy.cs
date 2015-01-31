@@ -16,7 +16,7 @@ namespace Shiva
         where T : class, new()
     {
         public Configuration<ViewModelProxy<T>> Configuration { get; private set; }
-        PropertyInfo[] objectProperties;
+        static PropertyInfo[] objectProperties;
 
         T originalModel, dirtyModel;
         public T Model
@@ -25,11 +25,6 @@ namespace Shiva
             set
             {
                 originalModel = value;
-                objectProperties =
-                    typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                             .Where(p => p.CanRead && p.CanWrite)
-                             .Where(p => isSupportedType(p.PropertyType))
-                             .ToArray();
                 editing = false;
                 dirtyModel = null;
             }
@@ -40,7 +35,7 @@ namespace Shiva
             Configuration = new Configuration<ViewModelProxy<T>>(this, OnPropertyChanged, OnErrorsChanged);
         }
 
-        #region static methods
+        #region static
 
         static void copy(T src, T dst, IEnumerable<PropertyInfo> infos)
         {
@@ -56,6 +51,15 @@ namespace Shiva
                    t == typeof(DateTime) ||
                    t == typeof(TimeSpan) ||
                    t == typeof(DateTimeOffset);
+        }
+
+        static ViewModelProxy()
+        {
+            objectProperties =
+                typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                         .Where(p => p.CanRead && p.CanWrite)
+                         .Where(p => isSupportedType(p.PropertyType))
+                         .ToArray();
         }
 
         #endregion
@@ -99,8 +103,8 @@ namespace Shiva
                 catch { convertErr = true; }
 
                 var oldVal = Dynamitey.Dynamic.InvokeGet(this, pi.Name);
-                if (!convertErr && 
-                    Dynamitey.Dynamic.InvokeBinaryOperator(val, ExpressionType.Equal, oldVal)) 
+                if (!convertErr &&
+                    Dynamitey.Dynamic.InvokeBinaryOperator(val, ExpressionType.Equal, oldVal))
                     return false;
 
                 Configuration.Validator.ClearErrors(pi.Name);
