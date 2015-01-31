@@ -107,10 +107,10 @@ namespace Shiva
                     Dynamitey.Dynamic.InvokeBinaryOperator(val, ExpressionType.Equal, oldVal))
                     return false;
 
-                Configuration.Validator.ClearErrors(pi.Name);
+                Configuration.ClearErrors(pi.Name);
 
                 if (convertErr)
-                    Configuration.Validator.AddError(pi.Name, "Value format error.");
+                    Configuration.AddError(pi.Name, "Value format error.");
                 else
                 {
                     pi.SetValue(Model, val, null);
@@ -165,13 +165,13 @@ namespace Shiva
 
         public System.Collections.IEnumerable GetErrors(string propertyName)
         {
-            if (!Configuration.Validator.PropertyErrors.ContainsKey(propertyName)) return null;
-            return Configuration.Validator.PropertyErrors[propertyName];
+            if (!Configuration.PropertyErrors.ContainsKey(propertyName)) return null;
+            return Configuration.PropertyErrors[propertyName];
         }
 
         public bool HasErrors
         {
-            get { return Configuration.Validator.PropertyErrors.Count > 0; }
+            get { return Configuration.PropertyErrors.Count > 0; }
         }
 
         #endregion
