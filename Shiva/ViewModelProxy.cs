@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 
 namespace Shiva
 {
-    public abstract class ViewModelProxy<T> : DynamicObject, INotifyPropertyChanged, IEditableObject, INotifyDataErrorInfo
+    public abstract class ViewModelProxy<T> :
+        DynamicObject, INotifyPropertyChanged, IEditableObject, INotifyDataErrorInfo
         where T : class, new()
     {
         public Configuration<ViewModelProxy<T>> Configuration { get; private set; }
@@ -27,6 +28,13 @@ namespace Shiva
                 originalModel = value;
                 editing = false;
                 dirtyModel = null;
+
+                foreach (var i in objectProperties) OnPropertyChanged(i.Name);
+                foreach (var i in Configuration.Wrappers)
+                {
+                    i.Value.Reset();
+                    OnPropertyChanged(i.Key);
+                }
             }
         }
 
@@ -81,14 +89,19 @@ namespace Shiva
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             var pi = objectProperties.FirstOrDefault((p) => p.Name == binder.Name);
-
             if (pi != null)
             {
                 result = Model != null ? pi.GetValue(Model, null) : null;
                 return true;
             }
-            else
-                return base.TryGetMember(binder, out result);
+
+            if (Configuration.Wrappers.ContainsKey(binder.Name))
+            {
+                result = Configuration.Wrappers[binder.Name].Value;
+                return true;
+            }
+
+            return base.TryGetMember(binder, out result);
         }
 
         public override bool TrySetMember(SetMemberBinder binder, object value)

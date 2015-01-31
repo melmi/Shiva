@@ -18,6 +18,7 @@ namespace Shiva
         public Action<string> PropertyChangedAction { get; private set; }
         public Dictionary<string, IConfigurationItem> PropertyConfigurations { get; private set; }
         public IReadOnlyDictionary<string, List<string>> PropertyErrors { get; private set; }
+        public Dictionary<string, IWrapper> Wrappers { get; private set; }
 
         public Configuration(TObject obj,
             Action<string> propertyChangedAction,
@@ -34,6 +35,7 @@ namespace Shiva
             ErrorsChangedAction = errorsChangedAction;
             propertyErrors = new Dictionary<string, List<string>>();
             PropertyErrors = new ReadOnlyDictionary<string, List<string>>(propertyErrors);
+            Wrappers = new Dictionary<string, IWrapper>();
         }
 
         void Object_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -62,6 +64,30 @@ namespace Shiva
                 PropertyConfigurations.Add(propertyName, configItem);
             }
             return configItem;
+        }
+
+        public void WrapObject<TModel, TViewModel>(Expression<Func<TModel>> selectorExpression)
+            where TModel : class, new()
+            where TViewModel : ViewModelProxy<TModel>, new()
+        {
+            string propertyName = PropertyEx.Name(selectorExpression);
+            Func<TModel> sourceGetterFunction = () =>
+            {
+                return Dynamitey.Dynamic.InvokeGet(this.Object, propertyName);
+            };
+            Wrappers.Add(propertyName, new ObjectWrapper<TModel, TViewModel>(sourceGetterFunction));
+        }
+
+        public void WrapList<TModel, TViewModel>(Expression<Func<IList<TModel>>> selectorExpression)
+            where TModel : class, new()
+            where TViewModel : ViewModelProxy<TModel>, new()
+        {
+            string propertyName = PropertyEx.Name(selectorExpression);
+            Func<IList<TModel>> sourceGetterFunction = () =>
+            {
+                return Dynamitey.Dynamic.InvokeGet(this.Object, propertyName);
+            };
+            Wrappers.Add(propertyName, new ListWrapper<TModel, TViewModel>(sourceGetterFunction));
         }
 
         #region Property Errors
@@ -109,7 +135,7 @@ namespace Shiva
             if (propertyErrors.ContainsKey(property)) propertyErrors.Remove(property);
             AddErrors(property, errs);
         }
-        
+
         #endregion
     }
 }
