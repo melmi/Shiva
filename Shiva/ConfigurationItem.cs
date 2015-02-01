@@ -20,12 +20,17 @@ namespace Shiva
 
         public ConfigurationItem<T> Enforce(Func<T, bool> rule, string message)
         {
+            if (rule == null) throw new ArgumentNullException("rule");
+            if (message == null) throw new ArgumentNullException("message");
+
             Rules.Add(new ValidationRule<T>(rule, message));
             return this;
         }
 
         public ConfigurationItem<T> DependsOn<T2>(Expression<Func<T2>> selectorExpression)
         {
+            if (selectorExpression == null) throw new ArgumentNullException("selectorExpression");
+
             Dependencies.Add(PropertyEx.Name(selectorExpression));
             return this;
         }

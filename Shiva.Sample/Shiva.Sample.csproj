@@ -53,6 +53,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\Company.cs" />
     <Compile Include="ViewModels\PersonDialogViewModel.cs" />
     <Compile Include="Views\PersonDialog.xaml.cs">
       <DependentUpon>PersonDialog.xaml</DependentUpon>
