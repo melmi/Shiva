@@ -17,6 +17,7 @@ namespace Tests
             try
             {
                 configItem.Enforce(null, "something");
+                Assert.Fail();
             }
             catch (ArgumentNullException e)
             {
@@ -36,6 +37,7 @@ namespace Tests
             try
             {
                 configItem.Enforce(s => true, null);
+                Assert.Fail();
             }
             catch (ArgumentNullException e)
             {
@@ -68,6 +70,7 @@ namespace Tests
             {
                 Expression<Func<int>> exp = null;
                 configItem.DependsOn(exp);
+                Assert.Fail();
             }
             catch (ArgumentNullException e)
             {

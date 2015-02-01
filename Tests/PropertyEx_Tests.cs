@@ -20,6 +20,7 @@ namespace Tests
             {
                 Expression<Func<string>> selectorExpression = null;
                 Shiva.PropertyEx.Name(selectorExpression);
+                Assert.Fail();
             }
             catch (ArgumentNullException e)
             {
@@ -28,6 +29,8 @@ namespace Tests
             }
         }
 
+        int dummy() { return 0; }
+
         [TestMethod]
         public void Name_WhenSelectorExpressionArgumentIsNotMemberExpression_ThrowArgumentException()
         {
@@ -35,8 +38,8 @@ namespace Tests
             // act
             try
             {
-                int x = 0;
-                Shiva.PropertyEx.Name(() => x);
+                Shiva.PropertyEx.Name<int>(() => dummy());
+                Assert.Fail();
             }
             catch (ArgumentException e)
             {

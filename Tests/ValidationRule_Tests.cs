@@ -18,6 +18,7 @@ namespace Tests
             try
             {
                 var vr = new Shiva.ValidationRule<string>(null, "something");
+                Assert.Fail();
             }
             catch (ArgumentNullException e)
             {
@@ -34,6 +35,7 @@ namespace Tests
             try
             {
                 var vr = new Shiva.ValidationRule<string>(x => true, null);
+                Assert.Fail();
             }
             catch (ArgumentNullException e)
             {
@@ -43,7 +45,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Ctor_WhenArgumentsAreOk_ShouldCreatedCorrectly()
+        public void Ctor_WhenArgumentsAreOk_ShouldCreateCorrectly()
         {
             // arrange
             // act
@@ -66,6 +68,7 @@ namespace Tests
             try
             {
                 vr.Validate(4);
+                Assert.Fail();
             }
             catch (ArgumentException e)
             {
