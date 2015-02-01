@@ -14,10 +14,8 @@ namespace Shiva.Sample.ViewModels
 
         public string FullName { get { return Model.FirstName + " " + Model.LastName; } }
 
-        public PersonDialogViewModel(Models.Person p)
+        public PersonDialogViewModel()
         {
-            Model = p;
-
             Configuration.Property(() => Model.Age)
                          .Enforce(x => x > 0, "Age should be greater than zero");
 
@@ -27,8 +25,6 @@ namespace Shiva.Sample.ViewModels
 
             OkCommand = new RelayCommand(x => EndEdit());
             CancelCommand = new RelayCommand(x => CancelEdit());
-
-            BeginEdit();
         }
     }
 }

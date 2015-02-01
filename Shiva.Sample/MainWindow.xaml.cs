@@ -32,7 +32,8 @@ namespace Shiva.Sample
             m.LastName = "Smith";
             m.Age = 30;
 
-            var vm = new ViewModels.PersonDialogViewModel(m);
+            var vm = new ViewModels.PersonDialogViewModel();
+            vm.Model = m;
 
             var v = new Views.PersonDialog();
             v.DataContext = vm;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shiva.Sample.Models
 {
-    public class Company
+    class Company
     {
         public string Name { get; set; }
         public string Address { get; set; }
