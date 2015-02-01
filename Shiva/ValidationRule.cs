@@ -10,8 +10,8 @@ namespace Shiva
     {
         public Func<T, bool> Rule { get; private set; }
         public string Message { get; private set; }
-        
-        public ValidationRule(Func<T,bool> rule, string message)
+
+        public ValidationRule(Func<T, bool> rule, string message)
         {
             if (rule == null) throw new ArgumentNullException("rule");
             if (message == null) throw new ArgumentNullException("message");
@@ -19,10 +19,17 @@ namespace Shiva
             Rule = rule;
             Message = message;
         }
-        
-            public bool Validate(object value)
+
+        public bool Validate(object value)
         {
-            return Rule((T)value);
-        } 
+            try
+            {
+                return Rule((T)value);
+            }
+            catch (InvalidCastException e)
+            {
+                throw new ArgumentException("could not cast", "value", e);
+            }
+        }
     }
 }

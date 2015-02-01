@@ -8,16 +8,9 @@ namespace Tests
     public class ConfigurationItem_Tests
     {
         [TestMethod]
-        public void Enforce_WhenRuleParameterIsNull_ThrowArgumentNullException()
+        public void Enforce_WhenRuleArgumentIsNull_ThrowArgumentNullException()
         {
             // arrange
-            Shiva.Sample.Models.Person person =
-                new Shiva.Sample.Models.Person
-                {
-                    FirstName = "John",
-                    LastName = "Smith",
-                    Age = 20
-                };
             var configItem = new Shiva.ConfigurationItem<string>();
 
             // act
@@ -34,7 +27,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Enforce_WhenMessageParameterIsNull_ThrowArgumentNullException()
+        public void Enforce_WhenMessageArgumentIsNull_ThrowArgumentNullException()
         {
             // arrange
             var configItem = new Shiva.ConfigurationItem<string>();
@@ -52,7 +45,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Enforce_WhenParametersAreOk_EnforceItemShouldAddedCorrectly()
+        public void Enforce_WhenArgumentsAreOk_EnforceItemShouldAddedCorrectly()
         {
             // arrange
             var configItem = new Shiva.ConfigurationItem<string>();
@@ -65,7 +58,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void DependsOn_WhenSelectorExpressionParameterIsNull_ThrowArgumentNullException()
+        public void DependsOn_WhenSelectorExpressionArgumentIsNull_ThrowArgumentNullException()
         {
             // arrange
             var configItem = new Shiva.ConfigurationItem<string>();
@@ -84,7 +77,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void DependsOn_WhenParametersAreOk_DependsOnItemShouldAddedCorrectly()
+        public void DependsOn_WhenArgumentsAreOk_DependsOnItemShouldAddedCorrectly()
         {
             // arrange
             var configItem = new Shiva.ConfigurationItem<string>();
