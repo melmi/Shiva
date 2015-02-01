@@ -34,6 +34,7 @@ namespace Shiva.Sample
 
             var vm = new ViewModels.PersonDialogViewModel();
             vm.Model = m;
+            vm.BeginEdit();
 
             var v = new Views.PersonDialog();
             v.DataContext = vm;
