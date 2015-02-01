@@ -16,7 +16,7 @@ namespace Shiva
 
             MemberExpression body = selectorExpression.Body as MemberExpression;
             if (body == null)
-                throw new ArgumentException("The body must be a member expression");
+                throw new ArgumentException("The body must be a member expression.", "selectorExpression");
 
             return body.Member.Name;
         }

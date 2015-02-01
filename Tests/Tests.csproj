@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="ConfigurationItem_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyEx_Tests.cs" />
     <Compile Include="ValidationRule_Tests.cs" />
   </ItemGroup>
   <ItemGroup>
