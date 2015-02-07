@@ -114,7 +114,8 @@ namespace Shiva
                 bool convertErr = false;
                 try
                 {
-                     val = Convert.ChangeType(value, pi.PropertyType); 
+                    var converter = TypeDescriptor.GetConverter(pi.PropertyType);
+                    val = converter.ConvertFrom(value);
                 }
                 catch { convertErr = true; }
 
