@@ -15,9 +15,11 @@
         <TextBlock Text="Age"/>
         <TextBox Text="{Binding Age}"/>
 
+        <CheckBox Content="Married" IsChecked="{Binding Married}"/>
+
         <TextBlock Text="Due"/>
         <TextBox Text="{Binding Due}"/>
-        
+
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Width="80" Margin="5" Content="OK" Command="{Binding OkCommand}"/>
             <Button Width="80" Margin="5" Content="Cancel" Command="{Binding CancelCommand}"/>

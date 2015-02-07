@@ -11,6 +11,7 @@ namespace Shiva.Sample.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int Age { get; set; }
+        public bool Married { get; set; }
         public TimeSpan Due { get; set; }
         public Company Company { get; set; }
     }

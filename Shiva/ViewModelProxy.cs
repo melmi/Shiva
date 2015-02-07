@@ -107,17 +107,20 @@ namespace Shiva
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
             var pi = objectProperties.FirstOrDefault((p) => p.Name == binder.Name);
-
             if (pi != null && Model != null)
             {
                 object val = null;
                 bool convertErr = false;
-                try
-                {
-                    var converter = TypeDescriptor.GetConverter(pi.PropertyType);
-                    val = converter.ConvertFrom(value);
-                }
-                catch { convertErr = true; }
+
+                if (value != null && pi.PropertyType.Equals(value.GetType()))
+                    val = value;
+                else
+                    try
+                    {
+                        var converter = TypeDescriptor.GetConverter(pi.PropertyType);
+                        val = converter.ConvertFrom(value);
+                    }
+                    catch { convertErr = true; }
 
                 var oldVal = Dynamitey.Dynamic.InvokeGet(this, pi.Name);
                 if (!convertErr &&
