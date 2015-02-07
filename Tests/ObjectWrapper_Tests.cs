@@ -18,7 +18,7 @@ namespace Tests
         {
             try
             {
-                var ow = new ObjectWrapper<Person, PersonDialogViewModel>(null);
+                var ow = new ObjectWrapperByModel<Person, PersonDialog>(null);
                 Assert.Fail();
             }
             catch (ArgumentNullException e)
@@ -27,7 +27,7 @@ namespace Tests
             }
 
             Func<Person> f = new Func<Person>(() => new Person());
-            var ow2 = new ObjectWrapper<Person, PersonDialogViewModel>(f);
+            var ow2 = new ObjectWrapperByModel<Person, PersonDialog>(f);
             Assert.AreEqual(ow2.SourceGetterFunction, f);
         }
 
@@ -35,10 +35,10 @@ namespace Tests
         public void Reset_Tests()
         {
             Person p = null;
-            ObjectWrapper<Person, PersonDialogViewModel> ow;
+            ObjectWrapperByModel<Person, PersonDialog> ow;
 
             p = new Person { FirstName = "A" };
-            ow = new ObjectWrapper<Person, PersonDialogViewModel>(() => p);
+            ow = new ObjectWrapperByModel<Person, PersonDialog>(() => p);
             Assert.AreEqual((ow.Value as ViewModelProxy<Person>).Model, p);
 
             p = new Person { FirstName = "B" };

@@ -10,10 +10,14 @@
         <TextBox Text="{Binding LastName}"/>
 
         <TextBlock Text="Full Name"/>
-        <TextBlock HorizontalAlignment="Center" Text="{Binding FullName}"/>
+        <TextBlock Text="{Binding FullName}" HorizontalAlignment="Center"/>
 
         <TextBlock Text="Age"/>
         <TextBox Text="{Binding Age}"/>
+
+        <TextBlock Text="Due"/>
+        <TextBox Text="{Binding Due}"/>
+        
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Width="80" Margin="5" Content="OK" Command="{Binding OkCommand}"/>
             <Button Width="80" Margin="5" Content="Cancel" Command="{Binding CancelCommand}"/>

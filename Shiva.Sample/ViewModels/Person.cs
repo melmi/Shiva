@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace Shiva.Sample.ViewModels
 {
-    class PersonDialogViewModel : Shiva.ViewModelProxy<Models.Person>
+    class Person : ViewModelProxy<Models.Person>
     {
-        public ICommand OkCommand { get; private set; }
-        public ICommand CancelCommand { get; private set; }
-
         public string FullName { get { return Model.FirstName + " " + Model.LastName; } }
 
-        public PersonDialogViewModel()
+        public Person()
         {
             Configuration.Property(() => Model.Age)
                          .Enforce(x => x > 0, "Age should be greater than zero");
@@ -23,8 +19,7 @@ namespace Shiva.Sample.ViewModels
                          .DependsOn(() => Model.FirstName)
                          .DependsOn(() => Model.LastName);
 
-            OkCommand = new RelayCommand(x => EndEdit());
-            CancelCommand = new RelayCommand(x => CancelEdit());
+            Configuration.IncludeObject<Models.Company, Company>(() => Model.Company);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Shiva
         DynamicObject, INotifyPropertyChanged, IEditableObject, INotifyDataErrorInfo
         where T : class, new()
     {
-        public Configuration<ViewModelProxy<T>> Configuration { get; private set; }
+        public Configuration<T> Configuration { get; private set; }
         static PropertyInfo[] objectProperties;
 
         T originalModel, dirtyModel;
@@ -40,7 +40,7 @@ namespace Shiva
 
         public ViewModelProxy()
         {
-            Configuration = new Configuration<ViewModelProxy<T>>(this, OnPropertyChanged, OnErrorsChanged);
+            Configuration = new Configuration<T>(this, OnPropertyChanged, OnErrorsChanged);
         }
 
         #region static
@@ -112,7 +112,10 @@ namespace Shiva
             {
                 object val = null;
                 bool convertErr = false;
-                try { val = Convert.ChangeType(value, pi.PropertyType); }
+                try
+                {
+                     val = Convert.ChangeType(value, pi.PropertyType); 
+                }
                 catch { convertErr = true; }
 
                 var oldVal = Dynamitey.Dynamic.InvokeGet(this, pi.Name);

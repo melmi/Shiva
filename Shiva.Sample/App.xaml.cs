@@ -13,5 +13,12 @@ namespace Shiva.Sample
     /// </summary>
     public partial class App : Application
     {
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            var vm = new ViewModels.MainWindow(Views.ViewFactoryService.Instance);
+            var m = new Views.MainWindow();
+            m.DataContext = vm;
+            m.Show();
+        }
     }
 }

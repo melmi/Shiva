@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 
 namespace Shiva
 {
-    class ObjectWrapper<TModel, TViewModel> : IWrapper
+    class ObjectWrapperByModel<TModel, TViewModel> : IWrapper
         where TModel : class, new()
         where TViewModel : ViewModelProxy<TModel>, new()
     {
+        Lazy<TViewModel> vm;
         public Func<TModel> SourceGetterFunction { get; private set; }
-        public object Value { get; private set; }
+        public object Value { get { return vm.Value; } }
 
-        public ObjectWrapper(Func<TModel> sourceGetterFunction)
+        public ObjectWrapperByModel(Func<TModel> sourceGetterFunction)
         {
             if (sourceGetterFunction == null) throw new ArgumentNullException("sourceGetterFunction");
             SourceGetterFunction = sourceGetterFunction;
@@ -23,7 +24,12 @@ namespace Shiva
 
         public void Reset()
         {
-            Value = new TViewModel { Model = SourceGetterFunction() };
+            vm = new Lazy<TViewModel>(() =>
+            {
+                var model = SourceGetterFunction();
+                if (model == null) return null;
+                return new TViewModel { Model = model };
+            });
         }
     }
 }

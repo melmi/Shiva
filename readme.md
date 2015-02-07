@@ -137,6 +137,11 @@ ViewModel is here:
     }
 ```
 
+## Including Object and IList Properties
+
+Shiva can also include properties of type `class` and `IList<T>` through `IncludeObject` and
+`IncludeList` methods of `Configuration`.
+
 ## More Shiva
 
 Although Shiva is mainly formed around `ViewModelProxy`, it has more:
@@ -145,8 +150,6 @@ Although Shiva is mainly formed around `ViewModelProxy`, it has more:
 - `ViewModelProxy` provides `GetMember` and `SetMember` methods which are the recommended way
   for changing value of `ViewModelProxy.Model` members.
 - There is a `SetFieldAndNotify` method as an extension for `INotifyPropertyChangedEx`.
-- The `Configuration` class can be used with any class that implements `INotifyPropertyChanged` and
-  `INotifyDataErrorInfo`.
 
 ## License
 

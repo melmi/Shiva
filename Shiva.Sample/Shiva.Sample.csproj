@@ -54,11 +54,23 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\Company.cs" />
-    <Compile Include="ViewModels\PersonDialogViewModel.cs" />
+    <Compile Include="ViewModels\Company.cs" />
+    <Compile Include="ViewModels\EmployeesAndCompanies.cs" />
+    <Compile Include="ViewModels\IViewFactoryService.cs" />
+    <Compile Include="ViewModels\MainWindow.cs" />
+    <Compile Include="ViewModels\PersonDialog.cs" />
+    <Compile Include="ViewModels\Person.cs" />
+    <Compile Include="Views\CompanyToEmployees.xaml.cs">
+      <DependentUpon>CompanyToEmployees.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EmployeeToCompany.xaml.cs">
+      <DependentUpon>EmployeeToCompany.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PersonDialog.xaml.cs">
       <DependentUpon>PersonDialog.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
+    <Compile Include="Views\ViewFactoryService.cs" />
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -66,10 +78,18 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\CompanyToEmployees.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EmployeeToCompany.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\PersonDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Shiva.Sample
+namespace Shiva.Sample.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -23,24 +23,6 @@ namespace Shiva.Sample
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var m = new Models.Person();
-            m.FirstName = "John";
-            m.LastName = "Smith";
-            m.Age = 30;
-
-            var vm = new ViewModels.PersonDialogViewModel();
-            vm.Model = m;
-            vm.BeginEdit();
-
-            var v = new Views.PersonDialog();
-            v.DataContext = vm;
-            v.ShowDialog();
-
-            MessageBox.Show(string.Format("{0} {1} {2}", m.FirstName, m.LastName, m.Age));
         }
     }
 }

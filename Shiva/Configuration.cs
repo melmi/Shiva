@@ -9,28 +9,28 @@ using System.Threading.Tasks;
 
 namespace Shiva
 {
-    public class Configuration<TObject> where TObject : INotifyPropertyChanged, INotifyDataErrorInfo
+    public class Configuration<T> where T : class, new()
     {
         Dictionary<string, List<string>> propertyErrors;
 
-        public TObject Object { get; private set; }
+        public ViewModelProxy<T> ViewModel { get; private set; }
         public Action<string> ErrorsChangedAction { get; private set; }
         public Action<string> PropertyChangedAction { get; private set; }
         public Dictionary<string, IConfigurationItem> PropertyConfigurations { get; private set; }
         public IReadOnlyDictionary<string, List<string>> PropertyErrors { get; private set; }
         public Dictionary<string, IWrapper> Wrappers { get; private set; }
 
-        public Configuration(TObject obj,
+        public Configuration(ViewModelProxy<T> viewModel,
             Action<string> propertyChangedAction,
             Action<string> errorsChangedAction)
         {
-            if (obj == null) throw new ArgumentNullException("obj");
+            if (viewModel == null) throw new ArgumentNullException("viewModel");
             if (propertyChangedAction == null) throw new ArgumentNullException("propertyChangedAction");
             if (errorsChangedAction == null) throw new ArgumentNullException("errorsChangedAction");
 
-            Object = obj;
+            ViewModel = viewModel;
             PropertyConfigurations = new Dictionary<string, IConfigurationItem>();
-            Object.PropertyChanged += Object_PropertyChanged;
+            ViewModel.PropertyChanged += Object_PropertyChanged;
             PropertyChangedAction = propertyChangedAction;
             ErrorsChangedAction = errorsChangedAction;
             propertyErrors = new Dictionary<string, List<string>>();
@@ -52,40 +52,54 @@ namespace Shiva
             Validate(e.PropertyName);
         }
 
-        public ConfigurationItem<T> Property<T>(Expression<Func<T>> selectorExpression)
+        public ConfigurationItem<TProperty> Property<TProperty>(Expression<Func<TProperty>> selectorExpression)
         {
             string propertyName = PropertyEx.Name(selectorExpression);
-            ConfigurationItem<T> configItem;
+            ConfigurationItem<TProperty> configItem;
             if (PropertyConfigurations.ContainsKey(propertyName))
-                configItem = PropertyConfigurations[propertyName] as ConfigurationItem<T>;
+                configItem = PropertyConfigurations[propertyName] as ConfigurationItem<TProperty>;
             else
             {
-                configItem = new ConfigurationItem<T>();
+                configItem = new ConfigurationItem<TProperty>();
                 PropertyConfigurations.Add(propertyName, configItem);
             }
             return configItem;
         }
 
-        public void WrapObject<TModel, TViewModel>(Expression<Func<TModel>> selectorExpression)
+        public void IncludeObject<TModel, TViewModel>(Expression<Func<TModel>> selectorExpression)
             where TModel : class, new()
             where TViewModel : ViewModelProxy<TModel>, new()
         {
             string propertyName = PropertyEx.Name(selectorExpression);
             Func<TModel> sourceGetterFunction = () =>
             {
-                return Dynamitey.Dynamic.InvokeGet(this.Object, propertyName);
+                if (ViewModel.Model == null)
+                    return null;
+                else
+                    return (TModel)Dynamitey.Dynamic.InvokeGet(ViewModel.Model, propertyName);
             };
-            Wrappers.Add(propertyName, new ObjectWrapper<TModel, TViewModel>(sourceGetterFunction));
+            Wrappers.Add(propertyName, new ObjectWrapperByModel<TModel, TViewModel>(sourceGetterFunction));
         }
 
-        public void WrapList<TModel, TViewModel>(Expression<Func<IList<TModel>>> selectorExpression)
+        public void IncludeObject<TModel, TViewModel>(Expression<Func<TModel>> selectorExpression, Func<TViewModel> viewModelGetter)
+            where TModel : class, new()
+            where TViewModel : ViewModelProxy<TModel>
+        {
+            string propertyName = PropertyEx.Name(selectorExpression);
+            Wrappers.Add(propertyName, new ObjectWrapperByViewModel<TModel, TViewModel>(viewModelGetter));
+        }
+
+        public void IncludeList<TModel, TViewModel>(Expression<Func<IList<TModel>>> selectorExpression)
             where TModel : class, new()
             where TViewModel : ViewModelProxy<TModel>, new()
         {
             string propertyName = PropertyEx.Name(selectorExpression);
             Func<IList<TModel>> sourceGetterFunction = () =>
             {
-                return Dynamitey.Dynamic.InvokeGet(this.Object, propertyName);
+                if (ViewModel.Model == null)
+                    return null;
+                else
+                    return (IList<TModel>)Dynamitey.Dynamic.InvokeGet(ViewModel.Model, propertyName);
             };
             Wrappers.Add(propertyName, new ListWrapper<TModel, TViewModel>(sourceGetterFunction));
         }
@@ -127,7 +141,7 @@ namespace Shiva
         {
             if (!PropertyConfigurations.ContainsKey(property)) return;
 
-            var value = Dynamitey.Dynamic.InvokeGet(Object, property);
+            var value = Dynamitey.Dynamic.InvokeGet(ViewModel, property);
             var errs = PropertyConfigurations[property].Rules
                                                                      .Where(v => !v.Validate(value))
                                                                      .Select(r => r.Message);
