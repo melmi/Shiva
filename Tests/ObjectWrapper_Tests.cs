@@ -1,12 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shiva;
-using Shiva.Sample.Models;
-using Shiva.Sample.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Models = Shiva.Sample.Models;
+using ViewModels = Shiva.Sample.ViewModels;
 
 namespace Tests
 {
@@ -18,7 +18,7 @@ namespace Tests
         {
             try
             {
-                var ow = new ObjectWrapperByModel<Person, PersonDialog>(null);
+                var ow = new ObjectWrapperByModel<Models.Person, ViewModels.PersonDialog>(null);
                 Assert.Fail();
             }
             catch (ArgumentNullException e)
@@ -26,24 +26,24 @@ namespace Tests
                 Assert.AreEqual(e.ParamName, "sourceGetterFunction");
             }
 
-            Func<Person> f = new Func<Person>(() => new Person());
-            var ow2 = new ObjectWrapperByModel<Person, PersonDialog>(f);
+            Func<Models.Person> f = new Func<Models.Person>(() => new Models.Person());
+            var ow2 = new ObjectWrapperByModel<Models.Person, ViewModels.PersonDialog>(f);
             Assert.AreEqual(ow2.SourceGetterFunction, f);
         }
 
         [TestMethod]
         public void Reset_Tests()
         {
-            Person p = null;
-            ObjectWrapperByModel<Person, PersonDialog> ow;
+            Models.Person p = null;
+            ObjectWrapperByModel<Models.Person, ViewModels.PersonDialog> ow;
 
-            p = new Person { FirstName = "A" };
-            ow = new ObjectWrapperByModel<Person, PersonDialog>(() => p);
-            Assert.AreEqual((ow.Value as ViewModelProxy<Person>).Model, p);
+            p = new Models.Person { FirstName = "A" };
+            ow = new ObjectWrapperByModel<Models.Person, ViewModels.PersonDialog>(() => p);
+            Assert.AreEqual((ow.Value as ViewModelProxy<Models.Person>).Model, p);
 
-            p = new Person { FirstName = "B" };
-            ow .Reset();
-            Assert.AreEqual((ow.Value as ViewModelProxy<Person>).Model, p);
+            p = new Models.Person { FirstName = "B" };
+            ow.Reset();
+            Assert.AreEqual((ow.Value as ViewModelProxy<Models.Person>).Model, p);
         }
     }
 }
