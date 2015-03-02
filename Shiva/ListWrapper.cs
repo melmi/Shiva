@@ -50,7 +50,11 @@ namespace Shiva
             {
                 case NotifyCollectionChangedAction.Add:
                     for (int i = 0; i < e.NewItems.Count; i++)
-                        source.Insert(e.NewStartingIndex + i, ((TViewModel)e.NewItems[i]).Model);
+                    {
+                        var vmItem = e.NewItems[i] as TViewModel;
+                        if (vmItem.Model == null) vmItem.Model = new TModel();
+                        source.Insert(e.NewStartingIndex + i, vmItem.Model);
+                    }
                     break;
 
                 case NotifyCollectionChangedAction.Move:
