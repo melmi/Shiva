@@ -45,6 +45,20 @@ namespace Shiva
 
         #region static
 
+        // http://stackoverflow.com/questions/2023210/
+        static T clone(T obj)
+        {
+            if (obj == null) return null;
+            if (obj is ICloneable) return (T)((ICloneable)obj).Clone();
+
+            System.Reflection.MethodInfo inst = obj.GetType().GetMethod("MemberwiseClone",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            if (inst != null)
+                return (T)inst.Invoke(obj, null);
+            else
+                return null;
+        }
+
         static void copy(T src, T dst, IEnumerable<PropertyInfo> infos)
         {
             foreach (var info in infos)
@@ -153,8 +167,7 @@ namespace Shiva
         {
             if (editing) return;
             editing = true;
-            dirtyModel = new T();
-            copy(originalModel, dirtyModel, objectProperties);
+            dirtyModel = clone(originalModel);
         }
 
         public virtual void CancelEdit()
