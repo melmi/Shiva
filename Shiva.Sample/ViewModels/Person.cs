@@ -19,7 +19,7 @@ namespace Shiva.Sample.ViewModels
                          .DependsOn(() => Model.FirstName)
                          .DependsOn(() => Model.LastName);
 
-            Configuration.IncludeObject<Models.Company, Company>(() => Model.Company);
+            Configuration.WrapObject<Models.Company, Company>(() => Model.Company);
         }
     }
 }

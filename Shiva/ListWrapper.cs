@@ -13,7 +13,7 @@ namespace Shiva
         where TViewModel : ViewModelProxy<TModel>, new()
     {
         IList<TModel> source;
-        Lazy<ObservableCollection<TViewModel>> vm;
+        Lazy<SuperObservableCollection<TViewModel>> vm;
 
         public Func<IList<TModel>> SourceGetterFunction { get; private set; }
         public object Value
@@ -33,11 +33,11 @@ namespace Shiva
             if (vm != null && vm.IsValueCreated)
                 vm.Value.CollectionChanged -= vm_CollectionChanged;
 
-            vm = new Lazy<ObservableCollection<TViewModel>>(() =>
+            vm = new Lazy<SuperObservableCollection<TViewModel>>(() =>
                 {
                     source = SourceGetterFunction();
                     if (source == null) return null;
-                    var result = new ObservableCollection<TViewModel>(source.Select(s => new TViewModel { Model = s }));
+                    var result = new SuperObservableCollection<TViewModel>(source.Select(s => new TViewModel { Model = s }));
                     result.CollectionChanged += vm_CollectionChanged;
                     return result;
                 });

@@ -137,10 +137,10 @@ ViewModel is here:
     }
 ```
 
-## Including Object and IList Properties
+## Wrapping Object and IList Properties
 
-Shiva can also include properties of type `class` and `IList<T>` through `IncludeObject` and
-`IncludeList` methods of `Configuration`.
+Shiva can also wrap properties of type `class` and `IList<T>` through `WrapObject` and
+`WrapList` methods of `Configuration`.
 
 ## More Shiva
 

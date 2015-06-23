@@ -66,7 +66,7 @@ namespace Shiva
             return configItem;
         }
 
-        public void IncludeObject<TModel, TViewModel>(Expression<Func<TModel>> selectorExpression)
+        public void WrapObject<TModel, TViewModel>(Expression<Func<TModel>> selectorExpression)
             where TModel : class, new()
             where TViewModel : ViewModelProxy<TModel>, new()
         {
@@ -81,7 +81,7 @@ namespace Shiva
             Wrappers.Add(propertyName, new ObjectWrapperByModel<TModel, TViewModel>(sourceGetterFunction));
         }
 
-        public void IncludeObject<TModel, TViewModel>(Expression<Func<TModel>> selectorExpression, Func<TViewModel> viewModelGetter)
+        public void WrapObject<TModel, TViewModel>(Expression<Func<TModel>> selectorExpression, Func<TViewModel> viewModelGetter)
             where TModel : class, new()
             where TViewModel : ViewModelProxy<TModel>
         {
@@ -89,7 +89,7 @@ namespace Shiva
             Wrappers.Add(propertyName, new ObjectWrapperByViewModel<TModel, TViewModel>(viewModelGetter));
         }
 
-        public void IncludeList<TModel, TViewModel>(Expression<Func<IList<TModel>>> selectorExpression)
+        public void WrapList<TModel, TViewModel>(Expression<Func<IList<TModel>>> selectorExpression)
             where TModel : class, new()
             where TViewModel : ViewModelProxy<TModel>, new()
         {

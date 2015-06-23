@@ -216,6 +216,12 @@ namespace Shiva
             return Dynamitey.Dynamic.InvokeGet(this, PropertyEx.Name(selectorExpression));
         }
 
+        public object GetWrappedMember<T>(Expression<Func<T>> selectorExpression)
+        {
+            var name = PropertyEx.Name(selectorExpression);
+            return Configuration.Wrappers.ContainsKey(name) ? Configuration.Wrappers[name] : null;
+        }
+
         public void SetMember<TValue>(Expression<Func<TValue>> selectorExpression, TValue value)
         {
             Dynamitey.Dynamic.InvokeSet(this, PropertyEx.Name(selectorExpression), value);

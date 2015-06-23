@@ -10,7 +10,7 @@ namespace Shiva.Sample.ViewModels
     {
         public Company()
         {
-            Configuration.IncludeList<Models.Person, Person>(() => Model.Employees);
+            Configuration.WrapList<Models.Person, Person>(() => Model.Employees);
         }
     }
 }
