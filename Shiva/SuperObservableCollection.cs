@@ -13,6 +13,17 @@ namespace Shiva
     public sealed class SuperObservableCollection<T> : ObservableCollection<T>
     where T : INotifyPropertyChanged
     {
+        int pauseCount = 0;
+
+        public void PauseRaisingEvents() { ++pauseCount; }
+
+        public void ResumeRaisingEvents() { pauseCount = Math.Max(0, pauseCount - 1); }
+
+        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+        {
+            if (pauseCount == 0) base.OnCollectionChanged(e);
+        }
+
         public SuperObservableCollection()
         {
             CollectionChanged += FullObservableCollectionCollectionChanged;

@@ -60,6 +60,9 @@
     <Compile Include="ViewModels\MainWindow.cs" />
     <Compile Include="ViewModels\PersonDialog.cs" />
     <Compile Include="ViewModels\Person.cs" />
+    <Compile Include="Views\Company.xaml.cs">
+      <DependentUpon>Company.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CompanyToEmployees.xaml.cs">
       <DependentUpon>CompanyToEmployees.xaml</DependentUpon>
     </Compile>
@@ -70,6 +73,10 @@
       <DependentUpon>PersonDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ViewFactoryService.cs" />
+    <Page Include="Views\Company.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

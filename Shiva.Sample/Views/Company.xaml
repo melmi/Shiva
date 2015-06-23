@@ -1,0 +1,34 @@
+﻿<Window x:Class="Shiva.Sample.Views.Company"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Company" Height="300" Width="300">
+    <DockPanel>
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Column="0" Grid.Row="0" Text="Name"/>
+            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Name}"/>
+
+            <TextBlock Grid.Column="0" Grid.Row="1" Text="Address"/>
+            <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Address}"/>
+
+            <TextBlock Grid.Column="0" Grid.Row="2" Text="Phone"/>
+            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Phone}"/>
+        </Grid>
+        <DataGrid AutoGenerateColumns="False"
+                  ItemsSource="{Binding Employees}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"/>
+                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>

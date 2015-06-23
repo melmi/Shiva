@@ -13,6 +13,7 @@ namespace Shiva.Sample.ViewModels
         public Shiva.RelayCommand FirePersonDialog { get; private set; }
         public Shiva.RelayCommand FireEmployeeToCompany { get; private set; }
         public Shiva.RelayCommand FireCompanyToEmployee { get; private set; }
+        public Shiva.RelayCommand FireCompany { get; private set; }
 
         public MainWindow(IViewFactoryService viewFactoryService)
         {
@@ -21,6 +22,7 @@ namespace Shiva.Sample.ViewModels
             FirePersonDialog = new RelayCommand(x => runPersonDialogExample());
             FireEmployeeToCompany = new RelayCommand(x => ViewFactoryService.RunEmployeesToCompany(getEmployeesAndCompanies()));
             FireCompanyToEmployee = new RelayCommand(x => ViewFactoryService.RunCompanyToEmployees(getEmployeesAndCompanies()));
+            FireCompany = new RelayCommand(x => ViewFactoryService.RunCompany(getEmployeesAndCompanies().Companies[0]));
         }
 
         void runPersonDialogExample()

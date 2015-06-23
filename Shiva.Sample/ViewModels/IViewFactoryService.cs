@@ -11,6 +11,7 @@ namespace Shiva.Sample.ViewModels
         void RunPersonDialog(object viewModel);
         void RunEmployeesToCompany(object viewModel);
         void RunCompanyToEmployees(object viewModel);
+        void RunCompany(object viewModel);
         void ShowMessage(string message);
     }
 }

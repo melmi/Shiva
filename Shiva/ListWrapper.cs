@@ -30,7 +30,7 @@ namespace Shiva
 
         public void Reset()
         {
-            if (vm != null && vm.IsValueCreated)
+            if (vm != null && vm.IsValueCreated && vm.Value != null)
                 vm.Value.CollectionChanged -= vm_CollectionChanged;
 
             vm = new Lazy<SuperObservableCollection<TViewModel>>(() =>
@@ -52,7 +52,11 @@ namespace Shiva
                     for (int i = 0; i < e.NewItems.Count; i++)
                     {
                         var vmItem = e.NewItems[i] as TViewModel;
-                        if (vmItem.Model == null) vmItem.Model = new TModel();
+                        if (vmItem.Model == null) {
+                            vm.Value.PauseRaisingEvents();
+                            vmItem.Model = new TModel();
+                            vm.Value.ResumeRaisingEvents();
+                        }
                         source.Insert(e.NewStartingIndex + i, vmItem.Model);
                     }
                     break;

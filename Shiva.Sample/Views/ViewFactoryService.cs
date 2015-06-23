@@ -27,6 +27,12 @@ namespace Shiva.Sample.Views
             v.ShowDialog();
         }
 
+        public void RunCompany(object viewModel)
+        {
+            var v = new Company { DataContext = viewModel };
+            v.ShowDialog();
+        }
+
         public void ShowMessage(string message)
         {
             MessageBox.Show(message);
@@ -35,5 +41,6 @@ namespace Shiva.Sample.Views
         ViewFactoryService() { }
         static Lazy<ViewFactoryService> instance = new Lazy<ViewFactoryService>(() => new ViewFactoryService());
         static public ViewFactoryService Instance { get { return instance.Value; } }
+
     }
 }

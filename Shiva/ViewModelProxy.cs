@@ -32,7 +32,7 @@ namespace Shiva
                 foreach (var i in objectProperties) OnPropertyChanged(i.Name);
                 foreach (var i in Configuration.Wrappers)
                 {
-                    i.Value.Reset();
+                    if (i.Value != null) i.Value.Reset();
                     OnPropertyChanged(i.Key);
                 }
             }
