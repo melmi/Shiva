@@ -139,7 +139,7 @@ namespace Shiva
                 var oldVal = Dynamitey.Dynamic.InvokeGet(this, pi.Name);
                 if (!convertErr &&
                     Dynamitey.Dynamic.InvokeBinaryOperator(val, ExpressionType.Equal, oldVal))
-                    return false;
+                    return true;
 
                 Configuration.ClearErrors(pi.Name);
 
